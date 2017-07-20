@@ -6,7 +6,10 @@ import Data.List
 --Cliente Parte 2
 data Cliente = Cliente {nombre::String, resistencia::Float, amigos::[Amigos], tragos::[Trago]} deriving (Show)
 type Amigos = Cliente
-data Trago = Trago {nombreTrago::String, variante::Float} deriving (Show)
+type Trago = (String, Float)
+--data Trago = Trago {nombreTrago::String, variante::Float} deriving (Show)
+nombreTrago (n,_) = n
+varianteTrago (_,v) = v
 
  --Parte 1
  --1
@@ -16,11 +19,13 @@ juan = Cliente "juan" 100 [] []
 rodri = Cliente "rodri" 150 [] []
 --marcos = Cliente "marcos" 40 [rodri]
 --3
-jarraLoca = Trago "jarraLoca" 10
-grogXD = Trago "grogXD" 0
-klusenerHuevo = Trago "klusenerHuevo" 5
-klusenerFrutilla = Trago "klusenerFrutilla" 8
-klusenerChocolate = Trago "klusenerChocolate" 9
+jarraLoca = ("jarraLoca", 10)
+grogXD = ("grogXD", 0)
+klusenerHuevo = ("klusenerHuevo", calcularKlusener "klusenerHuevo")
+klusenerFrutilla = ("klusenerFrutilla", calcularKlusener "klusenerFrutilla")
+klusenerChocolate = ("klusenerChocolate", calcularKlusener "klusenerChocolate")
+
+calcularKlusener nombreTrago = fromIntegral (length (nombreTrago) - length "klusener") -- Parse a float
 
 --4
 rescatarse tiempo cliente
@@ -33,11 +38,11 @@ marcos = Cliente "marcos" 40 [rodri, manu] [grogXD, grogXD, klusenerHuevo, kluse
 manu = Cliente "manu" 40 [rodri] [grogXD, grogXD, klusenerHuevo, klusenerFrutilla, jarraLoca]
 --6
 tomar trago cliente
- | nombreTrago trago == "jarraLoca" = cliente{resistencia = resistencia cliente - variante trago, tragos = tragos cliente ++ [trago]}
- | nombreTrago trago == "grogXD" = cliente{resistencia = 0, tragos = tragos cliente ++ [trago]}
- | nombreTrago trago == "klusenerHuevo" = cliente{resistencia = resistencia cliente - variante trago, tragos = tragos cliente ++ [trago]}
- | nombreTrago trago == "klusenerFrutilla" = cliente{resistencia = resistencia cliente - variante trago, tragos = tragos cliente ++ [trago]}
- | nombreTrago trago == "klusenerChocolate" = cliente{resistencia = resistencia cliente - variante trago, tragos = tragos cliente ++ [trago]}
+ | trago == jarraLoca = cliente{resistencia = resistencia cliente - varianteTrago trago, tragos = tragos cliente ++ [trago]}
+ | trago == grogXD = cliente{resistencia = 0, tragos = tragos cliente ++ [trago]}
+ | trago == klusenerHuevo = cliente{resistencia = resistencia cliente - varianteTrago trago, tragos = tragos cliente ++ [trago]}
+ | trago == klusenerFrutilla = cliente{resistencia = resistencia cliente - varianteTrago trago, tragos = tragos cliente ++ [trago]}
+ | trago == klusenerChocolate = cliente{resistencia = resistencia cliente - varianteTrago trago, tragos = tragos cliente ++ [trago]}
  | otherwise = cliente{tragos = tragos cliente ++ [trago]}
 
 --Parte 3
